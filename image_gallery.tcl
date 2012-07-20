@@ -2,8 +2,11 @@
 # Usage:
 # tclsh image_gallery.tcl /path/to/folder/that/contains/images
 
-set path [lindex $argv 0]
 set gal_dir_name "gallery"
+set thumb_width 240
+set big_width 800
+
+set path [lindex $argv 0]
 
 if { [file exists $path] == 0 } {
   puts "The folder $path was not found."
@@ -40,8 +43,8 @@ foreach img_file [glob -nocomplain -directory $path "*.{JPG, jpg}"] {
   # create gallery/ directory
   create_gallery_dir_in $path
   # resize the image and store it in gallery/ directory
-  # resize $img_file 800 "$path/$gal_dir_name/big"
-  # resize $img_file 240 "$path/$gal_dir_name/thumb"
+  resize $img_file $thumb_width "$path/$gal_dir_name/thumb"
+  resize $img_file $big_width "$path/$gal_dir_name/big"
 }
 
 set img_table "<html>
