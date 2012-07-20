@@ -1,3 +1,4 @@
+#!/usr/bin/env tclsh
 
 # Usage:
 # tclsh image_gallery.tcl /path/to/folder/that/contains/images
