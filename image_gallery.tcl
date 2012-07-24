@@ -38,7 +38,7 @@ proc create_gallery_dir_in {path} {
 set img_files {}
 
 # Resize the images and place them in the right folders
-foreach img_file [glob -nocomplain -directory $path "*.{JPG, jpg}"] {
+foreach img_file [glob -nocomplain -directory $path "*.{JPG,jpg}"] {
   # puts $img_file
   lappend img_files $img_file
   # create gallery/ directory
