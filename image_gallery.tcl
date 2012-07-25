@@ -27,6 +27,9 @@ proc create_gallery_dir_in {path} {
   if { [file exists "$path/$gal_dir_name"] == 0 } {
     file mkdir "$path/$gal_dir_name"
   }
+  if { [file exists "$path/$gal_dir_name/original"] == 0 } {
+    file mkdir "$path/$gal_dir_name/original"
+  }
   if { [file exists "$path/$gal_dir_name/big"] == 0 } {
     file mkdir "$path/$gal_dir_name/big"
   }
@@ -41,18 +44,22 @@ set img_files {}
 foreach img_file [glob -nocomplain -directory $path "*.{JPG,jpg}"] {
   # puts $img_file
   lappend img_files $img_file
+  set file_name [file tail $img_file]
   # create gallery/ directory
   create_gallery_dir_in $path
   # resize the image and store it in gallery/ directory
+  file copy -force $img_file "$path/$gal_dir_name/original/$file_name"
   resize $img_file $thumb_width "$path/$gal_dir_name/thumb"
   resize $img_file $big_width "$path/$gal_dir_name/big"
 }
 
 set img_table "<html>
 <head>
+<meta http-equiv='content-type' content='text/html; charset=utf-8' />
 <title>Photos</title>
 <style>
-p { margin: 0 0 30px; text-align: center; }
+td { padding-bottom: 30px; }
+p { margin: 0 0 10px; text-align: center; }
 </style>
 </head>
 <body>
@@ -64,7 +71,14 @@ for {set i 0} {$i < [llength $img_files]} {incr i} {
   set img_file [lindex $img_files $i]
   set img_file_name [file tail $img_file]
   puts $img_file
-  set img_table "$img_table<td><a href='$gal_dir_name/big/$img_file_name'><img src='$gal_dir_name/thumb/$img_file_name' /></a><p>$img_file_name</a></td>"
+  set img_table "$img_table<td>
+  <a href='$gal_dir_name/big/$img_file_name'>
+  <img src='$gal_dir_name/thumb/$img_file_name' />
+  </a>
+  <p>$img_file_name</p>
+  <p><a href='$gal_dir_name/big/$img_file_name'>Moyenne résolution</a></p>
+  <p><a href='$gal_dir_name/original/$img_file_name'>Haute résolution</a></p>
+  </td>"
   if { [expr ($i+1) % 4] == 0 } {
     set img_table "$img_table</tr><tr>"
   }
